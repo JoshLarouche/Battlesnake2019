@@ -74,7 +74,8 @@ def move():
         board[food['x']][food['y']] = 2
     length = len(data['you']['body'])
     board[data['you']['body'][-1]['x']][data['you']['body'][-1]['y']] = 0
-    tail = board[data['you']['body'][-1]['x']][data['you']['body'][-1]['y']]
+    tail = (data['you']['body'][-1]['x']], [data['you']['body'][-1]['y']])
+    print("first tail: ", tail)
 
     if data['you']['health'] > 25 and length > bfs.bfs(board, start, 1, tail) and bfs.bfs(board, start, 2, tail):
         exitNode = panic.exitFinder(data, board, start)
