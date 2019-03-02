@@ -80,6 +80,8 @@ def move():
     print("first tail: ", tail)
     for i in range(0, len(data['board']['snakes'])):
         if math.fabs(data['board']['snakes'][i]['body'][0]['x'] - start[0]) + math.fabs(data['board']['snakes'][i]['body'][0]['y'] - start[1]) == 2 and len(data['board']['snakes'][i]['body']) >= length:
+            print("enemy x: ", data['board']['snakes'][i]['body'][0]['x'])
+            print("start x: ", start[0])
             if math.fabs(data['board']['snakes'][i]['body'][0]['x'] - start[0]) == 2:
                 board[(data['board']['snakes'][i]['body'][0]['x'] + start[0])/2][start[1]] = -1
             elif math.fabs(data['board']['snakes'][i]['body'][0]['y'] - start[1]) == 2:
