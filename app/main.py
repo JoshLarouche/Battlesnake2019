@@ -139,6 +139,8 @@ def move():
         for x in deadWalls:
             board[x[0][0]][x[0][1]] = -1
         print("goal: ", goal)
+        if not goal:
+            goal = tail
         direction = aStar.aStar(board, start, goal)
         if is_wall(board, start + direction):
             direction = find_exit(board, start)
