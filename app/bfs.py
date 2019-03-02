@@ -14,7 +14,7 @@ def bfs(board, start, foodFind, tail):
 
         if board[current[0]][current[1]] == 2 and foodFind == 0:
             return current
-        if board[current[0]][current[1]] == tail and foodFind == 2:
+        if current[0] == tail[0] and current[1] == tail[1] and foodFind == 2:
             return True
 
 
