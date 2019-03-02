@@ -77,6 +77,17 @@ def move():
     board[data['you']['body'][-2]['x']][data['you']['body'][-2]['y']] = -1
     tail = (data['you']['body'][-1]['x'], data['you']['body'][-1]['y'])
     print("first tail: ", tail)
+    for i in range(0, len(data['board']['snakes'])):
+        if math.fabs(data['board']['snakes'][i]['body'][0]['x'] - start[0]) + math.fabs(data['board']['snakes'][i]['body'][0]['y'] - start[1]) == 2:
+            if math.fabs(data['board']['snakes'][i]['body'][0]['x'] - start[0]) == 2:
+                board[(data['board']['snakes'][i]['body'][0]['x'] + start[0])/2][start[1]] = -1
+            elif math.fabs(data['board']['snakes'][i]['body'][0]['y'] - start[1]) == 2:
+                board[start[0]][(data['board']['snakes'][i]['body'][0]['y'] + start[1])/2] = -1
+            else:
+                board[data['board']['snakes'][i]['body'][0]['x']][start[1]] = -1
+                board[start[0]][data['board']['snakes'][i]['body'][0]['y']] = -1
+ 
+            
 
     if data['you']['health'] > 25 and length > bfs.bfs(board, start, 1, tail) and bfs.bfs(board, start, 2, tail):
         exitNode = panic.exitFinder(data, board, start)
