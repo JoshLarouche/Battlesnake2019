@@ -162,12 +162,12 @@ def move():
         direction = aStar.aStar(board, start, goal)
         if direction[0] == 2:
             direction = find_exit(board, start)
-            if direction == 0:
+            if direction[0] == 2:
                 direction = currentBest[1]
                 break
         if is_wall(board, start + direction):
             direction = find_exit(board, start)
-            if direction == 0:
+            if direction[0] == 2:
                 direction = currentBest[1]
                 break
 
@@ -256,7 +256,7 @@ def find_exit(board, start):
         return (0, -1)
     if not is_wall(board, (start[0], start[1] + 1)):
         return (0, 1)
-    return 0
+    return (2, 2)
 
 @bottle.post('/end')
 def end():
