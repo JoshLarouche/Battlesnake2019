@@ -6,8 +6,8 @@ import numpy as np
 from time import time
 
 from . import api #ping_response, start_response, move_response, end_response testing2
-from aStar import aStar
-from bfs import bfs
+from . import aStar
+from . import bfs
 import panic
 
 
