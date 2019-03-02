@@ -141,6 +141,7 @@ def move():
         print("goal: ", goal)
         if not goal:
             goal = tail
+        print("goal: ", goal)
         direction = aStar.aStar(board, start, goal)
         if is_wall(board, start + direction):
             direction = find_exit(board, start)
