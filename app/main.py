@@ -48,10 +48,12 @@ def start():
     """
     print(json.dumps(data))
 
-    color = "#00FF00"
+    color = "#7851A9"
+    headType = "safe"
+    tailType = "round-bum"
     #"#E8E8E8"
 
-    return api.start_response(color)
+    return api.start_response(color, headType, tailType)
 
 
 @bottle.post('/move')
