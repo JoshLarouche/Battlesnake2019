@@ -34,7 +34,7 @@ def ping():
     A keep-alive endpoint used to prevent cloud application platforms,
     such as Heroku, from sleeping the application instance.
     """
-    return ping_response()
+    return api.ping_response()
 
 @bottle.post('/start')
 def start():
@@ -50,7 +50,7 @@ def start():
     color = "#00FF00"
     #"#E8E8E8"
 
-    return start_response(color)
+    return api.start_response(color)
 
 
 @bottle.post('/move')
@@ -76,10 +76,10 @@ def move():
     board[data['you']['body'][-1]['x']][data['you']['body'][-1]['y']] = 0
     tail = board[data['you']['body'][-1]['x']][data['you']['body'][-1]['y']]
 
-    if data['you']['health'] > 25 and length > bfs(board, start, 1, tail) and bfs(board, start, 2, tail):
+    if data['you']['health'] > 25 and length > bfs.bfs(board, start, 1, tail) and bfs.bfs(board, start, 2, tail):
         exitNode = panic.exitFinder(data, board, start)
         goal = exitNode[1]
-        direction = aStar(board, start, goal)
+        direction = aStar.aStar(board, start, goal)
         if np.array_equal(direction, [-1, 0]):
             direction = 'left'
         elif np.array_equal(direction, [1, 0]):
@@ -88,7 +88,7 @@ def move():
             direction = 'up'
         elif np.array_equal(direction, [0, 1]):
             direction = 'down'
-        return move_response(direction)
+        return api.move_response(direction)
 
     '''if length >= bfs(board, start, False):#delete this but it is prototype cycling
         exitNode = panic.exitFinder(data, board, start)
@@ -102,7 +102,7 @@ def move():
             direction = 'up'
         elif np.array_equal(direction, [0, 1]):
             direction = 'down'
-        return move_response(direction)'''
+        return api.move_response(direction)'''
     currentBest = [-1, -1]
     loop = True
     counter = 3
@@ -116,13 +116,13 @@ def move():
         loop = False
         for x in deadWalls:
             board[x[0][0]][x[0][1]] = -1
-        goal = bfs(board, start, 0, tail) #subscriptable error when goal is -1
+        goal = bfs.bfs(board, start, 0, tail) #subscriptable error when goal is -1
         for x in deadWalls:
             board[x[0][0]][x[0][1]] = x[1]
         #could return -1 if there is plenty of space but no available food
         if goal == -1:
             direction = currentBest[1]
-            longerCheck = bfs(board, start, 1, tail)
+            longerCheck = bfs.bfs(board, start, 1, tail)
             for x in deadWalls:
                 board[x[0][0]][x[0][1]] = -1
             print("panic board\n", board)
@@ -138,7 +138,7 @@ def move():
                 goal = exitNode[1]
         for x in deadWalls:
             board[x[0][0]][x[0][1]] = -1
-        direction = aStar(board, start, goal)
+        direction = aStar.aStar(board, start, goal)
         if is_wall(board, start + direction):
             direction = find_exit(board, start)
             if direction == 0:
@@ -150,7 +150,7 @@ def move():
         '''print(data['board']['height'])
         directions = ['up', 'down', 'left', 'right']
         direction = random.choice(directions)'''
-        safetyCheck = bfs(board, start + direction, 1, tail)
+        safetyCheck = bfs.bfs(board, start + direction, 1, tail)
         print('safetyCheck = ', safetyCheck)
         print('length = ', length)
         if safetyCheck < length: #add to length to increase pussiness, add food to path
@@ -168,16 +168,16 @@ def move():
             print(candidate + (0, 1))
             if not is_wall(board, candidate + (-1, 0)):
                 print("areaCheck")
-                areaCheck.append(bfs(board, candidate + (-1, 0), 1, tail))
+                areaCheck.append(bfs.bfs(board, candidate + (-1, 0), 1, tail))
             if not is_wall(board, candidate + (1, 0)):
                 print("areaCheck")
-                areaCheck.append(bfs(board, candidate + (1, 0), 1, tail))
+                areaCheck.append(bfs.bfs(board, candidate + (1, 0), 1, tail))
             if not is_wall(board, candidate + (0, -1)):
                 print("areaCheck")
-                areaCheck.append(bfs(board, candidate + (0, -1), 1, tail))
+                areaCheck.append(bfs.bfs(board, candidate + (0, -1), 1, tail))
             if not is_wall(board, candidate + (0, 1)):
                 print("areaCheck")
-                areaCheck.append(bfs(board, candidate + (0, 1), 1, tail))
+                areaCheck.append(bfs.bfs(board, candidate + (0, 1), 1, tail))
             print(areaCheck)
             if areaCheck:
                 checkMax = max(areaCheck)
@@ -202,7 +202,7 @@ def move():
 
     responseTime = time() - startTime
     print(responseTime)
-    return move_response(direction)
+    return api.move_response(direction)
 
 #def panic(data, board, start):
 
@@ -241,7 +241,7 @@ def end():
     """
     print(json.dumps(data))
 
-    return end_response()
+    return api.end_response()
 
 # Expose WSGI app (so gunicorn can find it)
 application = bottle.default_app()
