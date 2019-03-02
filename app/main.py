@@ -74,6 +74,7 @@ def move():
         board[food['x']][food['y']] = 2
     length = len(data['you']['body'])
     board[data['you']['body'][-1]['x']][data['you']['body'][-1]['y']] = 0
+    board[data['you']['body'][-2]['x']][data['you']['body'][-2]['y']] = -1
     tail = (data['you']['body'][-1]['x'], data['you']['body'][-1]['y'])
     print("first tail: ", tail)
 
