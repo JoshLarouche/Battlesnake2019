@@ -5,7 +5,7 @@ import bottle
 import numpy as np
 from time import time
 
-from . import api #ping_response, start_response, move_response, end_response testing2
+from . import api #ping_response, start_response, move_response, end_response testing3
 from . import aStar
 from . import bfs
 from . import panic
