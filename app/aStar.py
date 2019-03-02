@@ -1,6 +1,6 @@
 import numpy as np
 import math
-from Lib import queue
+from lib import queue
 
 def backPedal(cameFrom, start, goal):
 	path = []
