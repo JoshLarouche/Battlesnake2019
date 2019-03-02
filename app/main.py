@@ -160,7 +160,7 @@ def move():
         print("goal: ", goal)
         print("tail: ", tail)
         direction = aStar.aStar(board, start, goal)
-        if direction == -1:
+        if direction[0] == 2:
             direction = find_exit(board, start)
             if direction == 0:
                 direction = currentBest[1]
