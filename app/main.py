@@ -160,11 +160,17 @@ def move():
         print("goal: ", goal)
         print("tail: ", tail)
         direction = aStar.aStar(board, start, goal)
+        if direction == -1:
+            direction = find_exit(board, start)
+            if direction == 0:
+                direction = currentBest[1]
+                break
         if is_wall(board, start + direction):
             direction = find_exit(board, start)
             if direction == 0:
                 direction = currentBest[1]
                 break
+
         for x in deadWalls:
             board[x[0][0]][x[0][1]] = x[1]
         print(direction)
