@@ -109,7 +109,7 @@ def aStar(board, start, goal): #combine with bfs for efficiency
 		#print(current)
 		
 	
-	return -1
+	return (2, 2)
 
 
 def main():
