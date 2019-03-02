@@ -83,9 +83,9 @@ def move():
             print("enemy x: ", data['board']['snakes'][i]['body'][0]['x'])
             print("start x: ", start[0])
             if math.fabs(data['board']['snakes'][i]['body'][0]['x'] - start[0]) == 2:
-                board[(data['board']['snakes'][i]['body'][0]['x'] + start[0])/2][start[1]] = -1
+                board[int((data['board']['snakes'][i]['body'][0]['x'] + start[0])/2)][start[1]] = -1
             elif math.fabs(data['board']['snakes'][i]['body'][0]['y'] - start[1]) == 2:
-                board[start[0]][(data['board']['snakes'][i]['body'][0]['y'] + start[1])/2] = -1
+                board[start[0]][int((data['board']['snakes'][i]['body'][0]['y'] + start[1])/2)] = -1
             else:
                 board[data['board']['snakes'][i]['body'][0]['x']][start[1]] = -1
                 board[start[0]][data['board']['snakes'][i]['body'][0]['y']] = -1
