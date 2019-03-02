@@ -8,7 +8,7 @@ from time import time
 from . import api #ping_response, start_response, move_response, end_response testing2
 from . import aStar
 from . import bfs
-import panic
+from . import panic
 
 
 @bottle.route('/')
