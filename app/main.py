@@ -252,6 +252,13 @@ def board_init(data):
 
     # set tail to safe if snake had not just eaten
     for i in range(0, len(data['board']['snakes'])):
+        print("i")
+        print (i)
+        print("x")
+        print(x)
+        print("snake length")
+        print(len(data['board']['snakes'][i]['body']))
+        
         board[data['board']['snakes'][i]['body'][-1]['x']][data['board']['snakes'][i]['body'][-1]['y']] = 0
         board[data['board']['snakes'][i]['body'][-2]['x']][data['board']['snakes'][i]['body'][-2]['y']] = -1
 
