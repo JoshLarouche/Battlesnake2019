@@ -258,6 +258,8 @@ def board_init(data):
         print(x)
         print("snake length")
         print(len(data['board']['snakes'][i]['body']))
+        if len(data['board']['snakes'][i]['body']) == 1:
+            continue
         
         board[data['board']['snakes'][i]['body'][-1]['x']][data['board']['snakes'][i]['body'][-1]['y']] = 0
         board[data['board']['snakes'][i]['body'][-2]['x']][data['board']['snakes'][i]['body'][-2]['y']] = -1
