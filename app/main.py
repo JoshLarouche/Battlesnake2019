@@ -145,6 +145,9 @@ def move():
                 break
             else:
                 print('PANICKING')
+                #revert to original values
+                for x in deadWalls:
+                    board[x[0][0]][x[0][1]] = x[1]
                 #for x in deadWalls: #check why we had this in the first place it is the rando direciton bug
                 #    board[x[0][0]][x[0][1]] = -3
                 exitNode = panic.exitFinder(data, board, start)
