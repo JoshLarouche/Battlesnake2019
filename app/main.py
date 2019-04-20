@@ -137,17 +137,20 @@ def move():
         if goal == False:
             print('\n\n\n\n\n\nWE TOTALLY GOT HERE\n\n\n\n\n\n')
             direction = currentBest[1]
-            longerCheck = bfs.bfs(board, start, 1, tail)
             for x in deadWalls:
                 board[x[0][0]][x[0][1]] = -1
+            longerCheck = bfs.bfs(board, start, 1, tail)
+            #place to potentially revert for loop to
+            #for x in deadWalls:
+            #    board[x[0][0]][x[0][1]] = -1
             print("panic board\n", board)
             if longerCheck <= currentBest[0] or trapped(board, start):
                 break
             else:
                 print('PANICKING')
                 #revert to original values
-                for x in deadWalls:
-                    board[x[0][0]][x[0][1]] = x[1]
+                #for x in deadWalls:
+                #    board[x[0][0]][x[0][1]] = x[1]
                 #for x in deadWalls: #check why we had this in the first place it is the rando direciton bug
                 #    board[x[0][0]][x[0][1]] = -3
                 exitNode = panic.exitFinder(data, board, start)
