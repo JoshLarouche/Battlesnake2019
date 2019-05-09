@@ -2,29 +2,31 @@ from collections import deque
 import numpy as np
 
 '''
+OBJECTIVE LEGEND:
 0 = looking for food
 1 = count the available space
-2 = check if we can see our tail  (unused)
+2 = check if we can see our tail (unused)
 '''
 
 #breadth first search floodfill to find a goal
-def bfs(board, start, foodFind, tail):
+def bfs(board, start, objective, tail):
     count = 1
     queue = deque()
     queue.append(start)
-    closed = np.copy(board)#check for curiosity what type is close maybe set
+    closed = np.copy(board)
+
+    #priority queue for bfs loop
     while queue:
-        #print('here')
         count = count + 1
         current = queue.popleft()
         closed[current[0]][current[1]] = -1
 
         #if found food
-        if board[current[0]][current[1]] == 2 and foodFind == 0:
+        if board[current[0]][current[1]] == 2 and objective == 0:
             return current
 
         #if found tail
-        if current[0] == tail[0] and current[1] == tail[1] and foodFind == 2:
+        if current[0] == tail[0] and current[1] == tail[1] and objective == 2:
             return True
 
         #move through board for algorithm
@@ -60,7 +62,7 @@ def bfs(board, start, foodFind, tail):
                 closed[neighbour[0]][neighbour[1]] = -1
 
     #return count of available space
-    if foodFind == 1:
+    if objective == 1:
         return count
 
     return False
@@ -70,4 +72,4 @@ if __name__ == '__main__':
     board = np.zeros((19, 19), dtype=int)
     board[10][10] = 2
     test = bfs(board, (3, 3))
-    print(test)
+    #print(test)

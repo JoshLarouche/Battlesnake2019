@@ -218,7 +218,7 @@ def move():
 def board_init(data):
 
     '''
-    LEGEND:
+    BOARD LEGEND:
     food = 2
     wall = -1
     empty = 0
