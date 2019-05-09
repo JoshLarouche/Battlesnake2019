@@ -9,7 +9,6 @@ def backPedal(cameFrom, start, goal):
 	while curr[0] != -1:
 		path.append(tuple(curr))
 		curr = cameFrom[curr[0]][curr[1]]
-	#print("Path: ", path)
 	npPath = np.array(path[-2])
 	npStart = np.array(start)
 	direction = npPath - npStart
@@ -17,11 +16,9 @@ def backPedal(cameFrom, start, goal):
 
 #finds the shortest paths to a goal node from a start node
 def aStar(board, start, goal): #combine with bfs for efficiency
-	#print(board)
-	path = {}
 
 	#set of checked nodes on the board
-	closedSet = np.zeros(board.shape, dtype=int) #change later to np.copy
+	closedSet = np.zeros(board.shape, dtype=int) #possibly change to np.copy for consistency
 	for (x,y), value in np.ndenumerate(board):
 		if value == -1:
 			closedSet[x][y] = 1
@@ -34,7 +31,6 @@ def aStar(board, start, goal): #combine with bfs for efficiency
 	#node we came from
 	cameFrom = np.zeros((board.shape[0], board.shape[1], 2), dtype=int)
 	cameFrom[start[0]][start[1]] = (-1, -1)
-	#print(cameFrom)
 
 	#score the the weight it takes to travel to a node
 	gScore = np.full(board.shape, -1, dtype=int)
@@ -52,7 +48,6 @@ def aStar(board, start, goal): #combine with bfs for efficiency
 	while not openSet.empty():
 		current = openSet.get()[1]
 		if current == goal:
-			#print("We done boys")
 			return backPedal(cameFrom, start, goal)
 		if closedSet[current[0]][current[1]] == 1:
 			continue
@@ -60,46 +55,32 @@ def aStar(board, start, goal): #combine with bfs for efficiency
 		for x in range(0, 4):
 			
 			neighbour = (-1, -1)
-			
-			#LOOK AT THIS FUCKED UP SHITTERY AGAIN!!!
+
 			#left
 			if x is 0:
 				if current[0] == 0:
 					continue
-				'''elif board[current[0] - 1][current[1]] == -1:
-					continue'''
 				neighbour = (current[0] - 1, current[1])
+
 			#up
 			if x is 1:
 				if current[1] == 0:
 					continue
-				'''elif board[current[0]][current[1] - 1] == -1:
-					continue'''
 				neighbour = (current[0], current[1] - 1)
+
 			#right
 			if x is 2:
-				#print(board.shape[0])
 				if current[0] == board.shape[0] - 1:
-					#print('danger')
 					continue
-				'''elif board[current[0] + 1][current[1]] == -1:
-					continue'''
 				neighbour = (current[0] + 1, current[1])
-				#print(neighbour)
+
 			#down
 			if x is 3:
-				#print(board.shape[0])
 				if current[1] == board.shape[1] - 1:
-					#print('danger')
 					continue
-				'''elif board[current[0]][current[1] + 1] == -1:
-					continue'''
 				neighbour = (current[0], current[1] + 1)
-				#print(neighbour)
 
-			'''if neighbour[0] == 15 or neighbour[1] == 15:
-				continue'''
-
+			#if coordinate has already been checked
 			if closedSet[neighbour[0]][neighbour[1]] == 1:
 				continue
 
@@ -107,24 +88,17 @@ def aStar(board, start, goal): #combine with bfs for efficiency
 			tentativeGScore = gScore[current[0]][current[1]] + 1
 
 			neighbourGScore = gScore[neighbour[0]][neighbour[1]]
-			
-			#print("tentativeScore", tentativeGScore)
-			#print("neighbourScore", neighbourGScore)
-			#print()
 
-			#adding neighbour to openset if shortest path
+			#adding neighbour to openSet if shortest path
 			if tentativeGScore < neighbourGScore or neighbourGScore == -1:
 				
 				gScore[neighbour[0]][neighbour[1]] = tentativeGScore
 				cameFrom[neighbour[0]][neighbour[1]] = current
 				fScore[neighbour[0]][neighbour[1]] = gScore[neighbour[0]][neighbour[1]] + math.fabs(goal[0] - neighbour[0]) + math.fabs(goal[1] - neighbour[1])
-				
-				
+
 				openSet.put((fScore[neighbour[0]][neighbour[1]], neighbour))
-			
-		#print(current)
-		
-	
+
+	#error code for couldn't find path to goal
 	return (2, 2)
 
 #tester main

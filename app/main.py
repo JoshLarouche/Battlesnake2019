@@ -151,11 +151,12 @@ def move():
                 direction = currentBest[1]
                 break
 
-        '''if is_wall(board, start + direction):
+        #if direction is a wall, move another way
+        if is_wall(board, start + direction):
             direction = find_exit(board, start)
             if direction[0] == 2:
                 direction = currentBest[1]
-                break'''
+                break
 
         #revert to original values
         print("DEADWALL BOARD")
@@ -169,8 +170,9 @@ def move():
         safetyCheck = bfs.bfs(board, start + direction, spaceCount, tail)
         print('safetyCheck = ', safetyCheck)
         print('length = ', length)
+
         #if there is enough space for our size
-        if safetyCheck < length: #add to length to increase pussiness, add food to path
+        if safetyCheck < length:
             candidate = start + direction
             deadWalls.append((candidate, board[candidate[0]][candidate[1]]))
             board[candidate[0]][candidate[1]] = -1
@@ -191,6 +193,8 @@ def move():
             else:
                 checkMax = 0
             board[candidate[0]][candidate[1]] = deadWalls[-1][1]
+
+            #if some direction has more available space than currentBest, overwrite currentBest with that direction
             if checkMax > currentBest[0]:
                 currentBest = [checkMax, direction]
             loop = True
@@ -204,14 +208,11 @@ def move():
         direction = 'up'
     elif np.array_equal(direction, [0, 1]):
         direction = 'down'
-    #else last resort rando
 
     #check total algorithm time
     responseTime = time() - startTime
     print(responseTime)
     return api.move_response(direction)
-
-#def panic(data, board, start):
 
 #initializes the board we use for the data
 def board_init(data):
@@ -221,11 +222,11 @@ def board_init(data):
     food = 2
     wall = -1
     empty = 0
-    1 probs means something, maybe not
     '''
     boardHeight = data['board']['height']
     boardWidth = data['board']['width']
     board = np.zeros((boardWidth, boardHeight), dtype=int)
+
     #fills board with snakes
     for i in range(0, len(data['board']['snakes'])):
         for x in range(0, len(data['board']['snakes'][i]['body'])):
