@@ -3,7 +3,7 @@ import numpy as np
 '''
 0 = looking for food
 1 = count the available space
-2 = check if we can see our tail
+2 = check if we can see our tail  (unused)
 '''
 #breadth first search floodfill to find a goal
 def bfs(board, start, foodFind, tail):

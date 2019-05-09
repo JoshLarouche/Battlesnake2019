@@ -10,7 +10,11 @@ from . import api #ping_response, start_response, move_response, end_response te
 from . import aStar
 from . import bfs
 from . import panic
-#TEST
+
+#bfs flag legend
+food = 0
+spaceCount = 1
+tailCheck = 2 #not used in final project
 
 @bottle.route('/')
 def index():
@@ -93,31 +97,19 @@ def move():
             else:
                 board[data['board']['snakes'][i]['body'][0]['x']][start[1]] = -1
                 board[start[0]][data['board']['snakes'][i]['body'][0]['y']] = -1
- 
-            
-    #cycle if we are not hungry and big enough
-    '''if data['you']['health'] > 25 and length > bfs.bfs(board, start, 1, tail) and bfs.bfs(board, start, 2, tail):
-        exitNode = panic.exitFinder(data, board, start)
-        goal = exitNode[1]
-        direction = aStar.aStar(board, start, goal)
-        if np.array_equal(direction, [-1, 0]):
-            direction = 'left'
-        elif np.array_equal(direction, [1, 0]):
-            direction = 'right'
-        elif np.array_equal(direction, [0, -1]):
-            direction = 'up'
-        elif np.array_equal(direction, [0, 1]):
-            direction = 'down'
-        return api.move_response(direction)'''
 
     #setting up for loop
     currentBest = [-1, -1]
     loop = True
     counter = 3
+
+    '''a list of locations on the board and the values at each location, is used to create 
+    "imaginary walls" that keep other functions from checking the same direction multiple times'''
     deadWalls = []
 
-    #look around our snake's head for the best move
+    #MAIN LOOP OF SNAKE
     while loop:
+
         #only look in each direction around our head once
         if counter == 0:
             direction = currentBest[1]
@@ -125,52 +117,40 @@ def move():
         counter = counter - 1
         loop = False
 
-        #list of checked directions
-        for x in deadWalls:
-            board[x[0][0]][x[0][1]] = -1
-        goal = bfs.bfs(board, start, 0, tail)
+        addImaginaryWalls(board, deadWalls)
 
-        #revert to original values
-        for x in deadWalls:
-            board[x[0][0]][x[0][1]] = x[1]
-        #could return -1 if there is plenty of space but no available food
+        #check if there is a path to food, return closest food item
+        goal = bfs.bfs(board, start, food, tail)
+
+        removeImaginaryWalls(board, deadWalls)
+
+        #if bfs couldn't find any available food
         if goal == False:
             print('\n\n\n\n\n\nWE TOTALLY GOT HERE\n\n\n\n\n\n')
             direction = currentBest[1]
-            for x in deadWalls:
-                board[x[0][0]][x[0][1]] = -1
-            longerCheck = bfs.bfs(board, start, 1, tail)
-            #place to potentially revert for loop to
-            #for x in deadWalls:
-            #    board[x[0][0]][x[0][1]] = -1
+            addImaginaryWalls(board, deadWalls)
+            longerCheck = bfs.bfs(board, start, spaceCount, tail)
             print("panic board\n", board)
             if longerCheck <= currentBest[0] or trapped(board, start):
                 break
             else:
                 print('PANICKING')
-                #revert to original values
-                #for x in deadWalls:
-                #    board[x[0][0]][x[0][1]] = x[1]
-                #for x in deadWalls: #check why we had this in the first place it is the rando direciton bug
-                #    board[x[0][0]][x[0][1]] = -3
                 exitNode = panic.exitFinder(data, board, start)
-                #for x in deadWalls:
-                #    board[x[0][0]][x[0][1]] = x[1]
                 goal = exitNode[1]
 
         #restricts paths to stop aStar from checking same way twice
-        for x in deadWalls:
-            board[x[0][0]][x[0][1]] = -1
-        '''if not goal: #probably not valuable
-            goal = tail'''
+        addImaginaryWalls(board, deadWalls)
         print("GOAL")
         print(goal)
         direction = aStar.aStar(board, start, goal)
+
+        #wanted to keep return format the same, can treat this as an error code
         if direction[0] == 2:
             direction = find_exit(board, start)
             if direction[0] == 2:
                 direction = currentBest[1]
                 break
+
         if is_wall(board, start + direction):
             direction = find_exit(board, start)
             if direction[0] == 2:
@@ -180,14 +160,13 @@ def move():
         #revert to original values
         print("DEADWALL BOARD")
         print(board)
-        for x in deadWalls:
-            board[x[0][0]][x[0][1]] = x[1]
+        removeImaginaryWalls(board, deadWalls)
         print("REVERTED BOARD")
         print(board)
         print(direction)
 
         #looking ahead one move and checking remaining space to take best direction
-        safetyCheck = bfs.bfs(board, start + direction, 1, tail)
+        safetyCheck = bfs.bfs(board, start + direction, spaceCount, tail)
         print('safetyCheck = ', safetyCheck)
         print('length = ', length)
         #if there is enough space for our size
@@ -199,13 +178,13 @@ def move():
 
             #look for the largest amount of space around our body
             if not is_wall(board, candidate + (-1, 0)):
-                areaCheck.append(bfs.bfs(board, candidate + (-1, 0), 1, tail))
+                areaCheck.append(bfs.bfs(board, candidate + (-1, 0), spaceCount, tail))
             if not is_wall(board, candidate + (1, 0)):
-                areaCheck.append(bfs.bfs(board, candidate + (1, 0), 1, tail))
+                areaCheck.append(bfs.bfs(board, candidate + (1, 0), spaceCount, tail))
             if not is_wall(board, candidate + (0, -1)):
-                areaCheck.append(bfs.bfs(board, candidate + (0, -1), 1, tail))
+                areaCheck.append(bfs.bfs(board, candidate + (0, -1), spaceCount, tail))
             if not is_wall(board, candidate + (0, 1)):
-                areaCheck.append(bfs.bfs(board, candidate + (0, 1), 1, tail))
+                areaCheck.append(bfs.bfs(board, candidate + (0, 1), spaceCount, tail))
             print(areaCheck)
             if areaCheck:
                 checkMax = max(areaCheck)
@@ -247,16 +226,16 @@ def board_init(data):
     boardHeight = data['board']['height']
     boardWidth = data['board']['width']
     board = np.zeros((boardWidth, boardHeight), dtype=int)
-    # fills board with snakes
+    #fills board with snakes
     for i in range(0, len(data['board']['snakes'])):
         for x in range(0, len(data['board']['snakes'][i]['body'])):
             board[data['board']['snakes'][i]['body'][x]['x']][data['board']['snakes'][i]['body'][x]['y']] = -1
 
-    # fills board with food
+    #fills board with food
     for food in data['board']['food']:
         board[food['x']][food['y']] = 2
 
-    # set tail to safe if snake had not just eaten
+    #set tail to safe if snake had not just eaten
     for i in range(0, len(data['board']['snakes'])):
         print("i")
         print (i)
@@ -272,7 +251,15 @@ def board_init(data):
 
     return board
 
+#sets locations stored in deadWalls to walls in the board
+def addImaginaryWalls(board, deadWalls):
+    for x in deadWalls:
+        board[x[0][0]][x[0][1]] = -1
 
+#reverts locations stored in deadWalls to their original values in the board
+def removeImaginaryWalls(board, deadWalls):
+    for x in deadWalls:
+        board[x[0][0]][x[0][1]] = x[1]
 
 #checks if a coordinate is a wall or snake body
 def is_wall(board, coord):
@@ -314,7 +301,7 @@ def end():
 
     return api.end_response()
 
-# Expose WSGI app (so gunicorn can find it)
+#Expose WSGI app (so gunicorn can find it)
 application = bottle.default_app()
 
 if __name__ == '__main__':
