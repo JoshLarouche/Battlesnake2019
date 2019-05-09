@@ -10,7 +10,7 @@ from . import api #ping_response, start_response, move_response, end_response te
 from . import aStar
 from . import bfs
 from . import panic
-
+#TEST
 
 @bottle.route('/')
 def index():
