@@ -151,11 +151,11 @@ def move():
                 direction = currentBest[1]
                 break
 
-        if is_wall(board, start + direction):
+        '''if is_wall(board, start + direction):
             direction = find_exit(board, start)
             if direction[0] == 2:
                 direction = currentBest[1]
-                break
+                break'''
 
         #revert to original values
         print("DEADWALL BOARD")
