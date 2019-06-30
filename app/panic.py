@@ -51,7 +51,7 @@ def exitFinder(data, board, start):
             #look at a wall piece and assign a turn decay timer for when the node will free up
             if closed[neighbour[0]][neighbour[1]] == -1:
                 closed[neighbour[0]][neighbour[1]] = -3
-                for snake in range(0, len(data['board']['snakes'])): #change to pythonic obligation
+                for snake in range(0, len(data['board']['snakes'])): #change to pythonic
                     for body in range(0, len(data['board']['snakes'][snake]['body'])):
                         if data['board']['snakes'][snake]['body'][body]['x'] == neighbour[0] and data['board']['snakes'][snake]['body'][body]['y'] == neighbour[1]:
                             decayTimer = len(data['board']['snakes'][snake]['body']) - body

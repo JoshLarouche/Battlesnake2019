@@ -42,7 +42,7 @@ def aStar(board, start, goal): #combine with bfs for efficiency
 
 	fScore[start[0]][start[1]] = math.fabs(goal[0] - start[0]) + math.fabs(goal[1] - start[1])
 	
-	openSet.put((fScore[start[0]][start[1]], start))
+	openSet.put((-1 * fScore[start[0]][start[1]], start))
 
 	#checking for the goal node
 	while not openSet.empty():
@@ -90,13 +90,13 @@ def aStar(board, start, goal): #combine with bfs for efficiency
 			neighbourGScore = gScore[neighbour[0]][neighbour[1]]
 
 			#adding neighbour to openSet if shortest path
-			if tentativeGScore < neighbourGScore or neighbourGScore == -1:
+			if tentativeGScore > neighbourGScore or neighbourGScore == -1:
 				
 				gScore[neighbour[0]][neighbour[1]] = tentativeGScore
 				cameFrom[neighbour[0]][neighbour[1]] = current
 				fScore[neighbour[0]][neighbour[1]] = gScore[neighbour[0]][neighbour[1]] + math.fabs(goal[0] - neighbour[0]) + math.fabs(goal[1] - neighbour[1])
 
-				openSet.put((fScore[neighbour[0]][neighbour[1]], neighbour))
+				openSet.put((-1 * fScore[neighbour[0]][neighbour[1]], neighbour))
 
 	#error code for couldn't find path to goal
 	return (2, 2)
