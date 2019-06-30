@@ -104,12 +104,14 @@ def aStar(board, start, goal): #combine with bfs for efficiency
 
 #tester main
 def main():
-	board = np.zeros((19, 19), dtype=int)
-	goal = (5, 16)
-	start = (12, 3)
-	#print(board)
+	board = np.zeros((11, 11), dtype=int)
+	goal = (8, 3)
+	start = (9, 0)
+	board[9, 1] = -1
+	board[8, 3] = 3
+	print(board)
 	path = aStar(board, start, goal)
-	#print(path)
+	print(path)
 
 	
 if __name__ == '__main__':
