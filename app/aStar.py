@@ -12,6 +12,7 @@ def backPedal(cameFrom, start, goal):
 	npPath = np.array(path[-2])
 	npStart = np.array(start)
 	direction = npPath - npStart
+	print(path)
 	return direction
 
 #finds the shortest paths to a goal node from a start node
